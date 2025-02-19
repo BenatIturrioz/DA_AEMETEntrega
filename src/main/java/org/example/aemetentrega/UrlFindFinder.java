@@ -44,12 +44,6 @@ public class UrlFindFinder {
             throw new RuntimeException(e);
         }
 
-        if (iXmlFile != null) {
-            XmlSaver.saveXmlFile(iXmlFile, "aemet.xml");
-            System.out.println("aemet.xml saved");
-        } else {
-            System.out.println("No se pudo descargar el archivo XML.");
-        }
 
     }
 
