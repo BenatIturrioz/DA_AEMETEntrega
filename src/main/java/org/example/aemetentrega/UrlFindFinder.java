@@ -28,7 +28,7 @@ public class UrlFindFinder {
 
         ArrayList<Object> a = getFiles(true, url);
 
-        InputStream iXmlFile = (InputStream) a.get(0);
+        InputStream iXmlFile = (InputStream) a.get(0); //Control+shift+f ikusteko nun erabili
         File fXmlFile = (File) a.get(1);
 
         if (url != null) {
@@ -37,9 +37,9 @@ public class UrlFindFinder {
             document = dBuilder.parse(fXmlFile);
         }
 
-        NodeList nodesList;
+        NodeList listadenodos;
         try {
-            nodesList = XpathHelper.get(document, "");
+            listadenodos = XpathHelper.get(document, "/*");
         } catch (XPathExpressionException e) {
             throw new RuntimeException(e);
         }

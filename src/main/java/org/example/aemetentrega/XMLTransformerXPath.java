@@ -41,20 +41,21 @@ public class XMLTransformerXPath
 
             Document newDoc = builder.newDocument();
 
-            Element root = newDoc.createElement("ikasleak");
+            Element root = newDoc.createElement("");
             newDoc.appendChild(root);
 
             XPathFactory xPathFactory = XPathFactory.newInstance();
             XPath xpath = xPathFactory.newXPath();
 
-            XPathExpression expr = xpath.compile("//student/name");
-            NodeList nameNodes = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+            XPathExpression expr = xpath.compile("//dia/temperatura");
+            NodeList nodeList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 
-            for (int i = 0; i < nameNodes.getLength(); i++) {
-                Element newStudent = newDoc.createElement("student");
-                Element newName = newDoc.createElement("name");
 
-                String nameText = nameNodes.item(i).getTextContent();
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Element newStudent = newDoc.createElement("dia");
+                Element newName = newDoc.createElement("temperatura");
+
+                String nameText = nodeList.item(i).getTextContent();
 
                 String moteValue = nameText.toLowerCase().replace(" ", "_");
                 newName.setAttribute("mote", moteValue);
