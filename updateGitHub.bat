@@ -1,9 +1,9 @@
 @echo off
-cd /C ../../EguraldiaXML/
+cd /d C:\Users\ander\Desktop\Clase\EguraldiaXML
 
 git checkout master
 
-git add .
+git add *
 
 git commit -m "Commit automático"
 
