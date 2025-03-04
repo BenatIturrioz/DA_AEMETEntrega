@@ -19,7 +19,6 @@ import java.util.ArrayList;
 public class UrlFindFinder {
 
     public static void obtainDocument() throws ParserConfigurationException, NoSuchAlgorithmException, IOException, KeyManagementException, SAXException {
-
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         Document document = null;
@@ -28,24 +27,25 @@ public class UrlFindFinder {
 
         ArrayList<Object> a = getFiles(true, url);
 
-        InputStream iXmlFile = (InputStream) a.get(0); //Control+shift+f ikusteko nun erabili
+        InputStream iXmlFile = (InputStream) a.get(0);
         File fXmlFile = (File) a.get(1);
 
-        if (url != null) {
+        if (iXmlFile != null) {
             document = dBuilder.parse(iXmlFile);
-        } else {
+        } else if (fXmlFile != null) {
             document = dBuilder.parse(fXmlFile);
+        } else {
+            throw new IOException("No se pudo obtener el archivo XML.");
         }
 
-        NodeList listadenodos;
-        try {
-            listadenodos = XpathHelper.get(document, "/*");
-        } catch (XPathExpressionException e) {
-            throw new RuntimeException(e);
-        }
+        document.getDocumentElement().normalize();
 
 
+        XMLTransformerXPath.transformXML(document);
+
+        System.out.println("Archivo XML descargado y procesado correctamente.");
     }
+
 
     public static ArrayList<Object> getFiles(boolean aukeratu, String url)
             throws KeyManagementException, NoSuchAlgorithmException, MalformedURLException, IOException {
@@ -60,11 +60,11 @@ public class UrlFindFinder {
 
         if (aukeratu) {
             fXmlFile = FileChoser.chooseWindow();
-        } else {
+        } else if (fXmlFile == null) {
             fXmlFile = FileChoser.getFileFromRoute();
         }
 
-        ArrayList<Object> a = new ArrayList();
+        ArrayList<Object> a = new ArrayList<>();
         a.add(iXmlFile);
         a.add(fXmlFile);
 

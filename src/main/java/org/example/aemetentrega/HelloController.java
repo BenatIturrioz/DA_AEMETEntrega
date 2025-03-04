@@ -17,6 +17,7 @@ public class HelloController {
     protected void onHelloButtonClick() throws ParserConfigurationException, NoSuchAlgorithmException, IOException, KeyManagementException, SAXException {
 
         UrlFindFinder.obtainDocument();
-
+        BatchExecutor batchExecutor = new BatchExecutor();
+        batchExecutor.executeBatchFile();
     }
 }

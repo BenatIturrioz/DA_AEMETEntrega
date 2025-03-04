@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<datos>
+  <dia>
+    <fecha>2025-03-04</fecha>
+    <prob_precipitacion_media>18.75</prob_precipitacion_media>
+    <temperatura_media>12.75</temperatura_media>
+  </dia>
+  <dia>
+    <fecha>2025-03-05</fecha>
+    <prob_precipitacion_media>0.0</prob_precipitacion_media>
+    <temperatura_media>13.25</temperatura_media>
+  </dia>
+  <dia>
+    <fecha>2025-03-06</fecha>
+    <prob_precipitacion_media>81.66666666666667</prob_precipitacion_media>
+  </dia>
+  <dia>
+    <fecha>2025-03-07</fecha>
+    <prob_precipitacion_media>95.0</prob_precipitacion_media>
+  </dia>
+  <dia>
+    <fecha>2025-03-08</fecha>
+    <prob_precipitacion_media>100.0</prob_precipitacion_media>
+  </dia>
+  <dia>
+    <fecha>2025-03-09</fecha>
+    <prob_precipitacion_media>75.0</prob_precipitacion_media>
+  </dia>
+  <dia>
+    <fecha>2025-03-10</fecha>
+    <prob_precipitacion_media>75.0</prob_precipitacion_media>
+  </dia>
+</datos>
