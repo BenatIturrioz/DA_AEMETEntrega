@@ -16,7 +16,6 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 import java.io.File;
-
 public class XMLTransformerXPath {
 
     public static void transformXML(Document doc) {
@@ -29,7 +28,7 @@ public class XMLTransformerXPath {
 
             XPathFactory xPathFactory = XPathFactory.newInstance();
             XPath xpath = xPathFactory.newXPath();
-            XPathExpression expr = xpath.compile("//dia[prob_precipitacion and temperatura]");
+            XPathExpression expr = xpath.compile("//dia[prob_precipitacion and temperatura and estado_cielo]");
             NodeList nodeList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 
             for (int i = 0; i < nodeList.getLength(); i++) {
@@ -65,7 +64,6 @@ public class XMLTransformerXPath {
                     }
                 }
 
-
                 NodeList tempNodes = diaElement.getElementsByTagName("temperatura");
                 if (tempNodes.getLength() > 0) {
                     Element tempElement = (Element) tempNodes.item(0);
@@ -84,6 +82,25 @@ public class XMLTransformerXPath {
 
                     } catch (NumberFormatException e) {
                         System.out.println("Error al convertir temperatura máxima/mínima: " + maximaStr + ", " + minimaStr);
+                    }
+                }
+
+
+                NodeList estadoCieloNodes = diaElement.getElementsByTagName("estado_cielo");
+                if (estadoCieloNodes.getLength() > 0) {
+                    for (int j = 0; j < estadoCieloNodes.getLength(); j++) {
+                        Element estadoCieloElement = (Element) estadoCieloNodes.item(j);
+                        String periodo = estadoCieloElement.getAttribute("periodo");
+                        String descripcion = estadoCieloElement.getAttribute("descripcion");
+
+                        if (!descripcion.isEmpty()) {
+                            Element newEstadoCielo = newDoc.createElement("estado_cielo");
+                            if(!periodo.isEmpty()) {
+                                newEstadoCielo.setAttribute("periodo", periodo);
+                            }
+                            newEstadoCielo.setTextContent(descripcion);
+                            newDia.appendChild(newEstadoCielo);
+                        }
                     }
                 }
 
