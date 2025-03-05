@@ -29,24 +29,23 @@ public class XMLTransformerXPath {
 
             XPathFactory xPathFactory = XPathFactory.newInstance();
             XPath xpath = xPathFactory.newXPath();
-            XPathExpression expr = xpath.compile("//dia[prob_precipitacion and temperatura]"); // Seleccionamos todos los días con prob_precipitacion y temperatura
+            XPathExpression expr = xpath.compile("//dia[prob_precipitacion and temperatura]");
             NodeList nodeList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 
             for (int i = 0; i < nodeList.getLength(); i++) {
                 Element diaElement = (Element) nodeList.item(i);
                 Element newDia = newDoc.createElement("dia");
 
-                // Extraemos la fecha del día
                 String fecha = diaElement.getAttribute("fecha");
                 Element newFecha = newDoc.createElement("fecha");
                 newFecha.setTextContent(fecha);
                 newDia.appendChild(newFecha);
 
-                // Extraemos y calculamos la media de la probabilidad de precipitación
+
                 NodeList probNodes = diaElement.getElementsByTagName("prob_precipitacion");
                 if (probNodes.getLength() > 0) {
                     double probSum = 0;
-                    int probCount = 0; // Para contar los valores válidos de prob_precipitacion
+                    int probCount = 0;
                     for (int j = 0; j < probNodes.getLength(); j++) {
                         String probValue = probNodes.item(j).getTextContent().trim();
                         if (!probValue.isEmpty()) {
@@ -54,8 +53,7 @@ public class XMLTransformerXPath {
                                 probSum += Double.parseDouble(probValue);
                                 probCount++;
                             } catch (NumberFormatException e) {
-                                // Si el valor no es válido, lo ignoramos
-                                System.out.println("Invalid prob_precipitacion value: " + probValue);
+                                System.out.println("Valor inválido en prob_precipitacion: " + probValue);
                             }
                         }
                     }
@@ -67,37 +65,31 @@ public class XMLTransformerXPath {
                     }
                 }
 
-                // Extraemos y calculamos la media de la temperatura por hora
+
                 NodeList tempNodes = diaElement.getElementsByTagName("temperatura");
                 if (tempNodes.getLength() > 0) {
-                    double tempSum = 0;
-                    int tempCount = 0; // Para contar los valores válidos de temperatura
-                    NodeList temperaturaHoras = ((Element) tempNodes.item(0)).getElementsByTagName("dato");
-                    for (int j = 0; j < temperaturaHoras.getLength(); j++) {
-                        String tempValue = temperaturaHoras.item(j).getTextContent().trim();
-                        if (!tempValue.isEmpty()) {
-                            try {
-                                tempSum += Double.parseDouble(tempValue);
-                                tempCount++;
-                            } catch (NumberFormatException e) {
-                                // Si el valor no es válido, lo ignoramos
-                                System.out.println("Invalid temperatura value: " + tempValue);
-                            }
-                        }
-                    }
-                    if (tempCount > 0) {
-                        double tempAverage = tempSum / tempCount;
+                    Element tempElement = (Element) tempNodes.item(0);
+
+                    String maximaStr = tempElement.getElementsByTagName("maxima").item(0).getTextContent().trim();
+                    String minimaStr = tempElement.getElementsByTagName("minima").item(0).getTextContent().trim();
+
+                    try {
+                        double maxima = Double.parseDouble(maximaStr);
+                        double minima = Double.parseDouble(minimaStr);
+                        double tempMedia = (maxima + minima) / 2;
+
                         Element newTemp = newDoc.createElement("temperatura_media");
-                        newTemp.setTextContent(String.valueOf(tempAverage));
+                        newTemp.setTextContent(String.valueOf(tempMedia));
                         newDia.appendChild(newTemp);
+
+                    } catch (NumberFormatException e) {
+                        System.out.println("Error al convertir temperatura máxima/mínima: " + maximaStr + ", " + minimaStr);
                     }
                 }
 
-                // Añadimos el nuevo día al documento raíz
                 root.appendChild(newDia);
             }
 
-            // Guardamos el nuevo documento XML con la información transformada
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
